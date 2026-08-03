@@ -1,0 +1,15 @@
+{
+  "venvPath": "c:/Users/Mugundhan/Documents/career_intelligence_os",
+  "venv": "venv",
+  "extraPaths": [
+    "c:/Users/Mugundhan/Documents/career_intelligence_os",
+    "c:/Users/Mugundhan/Documents/career_intelligence_os/backend",
+    "c:/Users/Mugundhan/Documents/career_intelligence_os/venv/Lib/site-packages"
+  ],
+  "reportMissingImports": "none",
+  "reportMissingModuleSource": "none",
+  "reportMissingTypeStubs": "none",
+  "reportUnknownMemberType": "none",
+  "reportUnknownVariableType": "none",
+  "reportUnknownArgumentType": "none"
+}

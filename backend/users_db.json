@@ -1,0 +1,20 @@
+{
+  "mmugunthan688@gmail.com": {
+    "name": "Mugunthan ",
+    "email": "mmugunthan688@gmail.com",
+    "password": "$2b$12$lS1OujXKIhkZbAg6SDAuN.jhIFn8yseXwD1vhKFaBfFrx7a1.Jsv2",
+    "role": "job_seeker"
+  },
+  "mmugunthan7777@gmail.com": {
+    "name": "Mugunthan M",
+    "email": "mmugunthan7777@gmail.com",
+    "password": "$2b$12$JiQRuXVNptaB7yaY1jg/3uWESVOY3dRQKn0pfGoFObOY7O3mgfQui",
+    "role": "job_seeker"
+  },
+  "mugunthan_ats_test@gmail.com": {
+    "name": "Mugunthan M",
+    "email": "mugunthan_ats_test@gmail.com",
+    "password": "$2b$12$Tx37uqUkdLJWHbivPNKvr.F88TGlJRxizohG/K92xBqhBDJ8eL9sS",
+    "role": "job_seeker"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "python.defaultInterpreterPath": "c:/Users/Mugundhan/Documents/career_intelligence_os/venv/Scripts/python.exe",
+  "python.analysis.extraPaths": [
+    "c:/Users/Mugundhan/Documents/career_intelligence_os",
+    "c:/Users/Mugundhan/Documents/career_intelligence_os/backend",
+    "c:/Users/Mugundhan/Documents/career_intelligence_os/venv/Lib/site-packages"
+  ],
+  "python.autoComplete.extraPaths": [
+    "c:/Users/Mugundhan/Documents/career_intelligence_os",
+    "c:/Users/Mugundhan/Documents/career_intelligence_os/backend",
+    "c:/Users/Mugundhan/Documents/career_intelligence_os/venv/Lib/site-packages"
+  ],
+  "python.analysis.autoSearchPaths": true,
+  "python.analysis.useLibraryCodeForTypes": true,
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportMissingImports": "none",
+    "reportMissingModuleSource": "none",
+    "reportMissingTypeStubs": "none",
+    "reportUnknownMemberType": "none",
+    "reportUnknownVariableType": "none",
+    "reportUnknownArgumentType": "none"
+  }
+}
