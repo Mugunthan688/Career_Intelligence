@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  # FastAPI Python Backend + LangGraph 4-Agent Pipeline
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: career_intelligence_backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    restart: always
+
+  # React Vite Frontend + Cyber-HUD Glassmorphic Interface
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        VITE_API_BASE_URL: "http://localhost:8000"
+    container_name: career_intelligence_frontend
+    ports:
+      - "80:80"
+      - "5173:80"
+    depends_on:
+      - backend
+    restart: always
