@@ -29,3 +29,11 @@ class TokenResponse(BaseModel):
     token_type: str = "bearer"
     role: UserRole
     name: str
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+class ResetPasswordRequest(BaseModel):
+    email: EmailStr
+    otp: str
+    new_password: str

@@ -1,9 +1,11 @@
 import os
 import json
+import random
+import time
 import bcrypt
 from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException
 from fastapi.responses import Response
-from backend.auth.models import UserRegister, UserLogin, TokenResponse
+from backend.auth.models import UserRegister, UserLogin, TokenResponse, ForgotPasswordRequest, ResetPasswordRequest
 from backend.auth.jwt_handler import create_access_token
 from backend.auth.rbac import get_current_user, require_job_seeker
 from backend.utils.pdf_parser import parse_resume
@@ -85,6 +87,60 @@ def login(user: UserLogin):
         raise HTTPException(status_code=401, detail="Incorrect password")
     token = create_access_token({"sub": user.email, "role": db_user["role"], "name": db_user["name"]})
     return TokenResponse(access_token=token, role=db_user["role"], name=db_user["name"])
+
+
+# In-memory OTP storage for password reset: { email: { "otp": "123456", "timestamp": float } }
+OTP_STORE = {}
+
+@router.post("/auth/forgot-password")
+def forgot_password(req: ForgotPasswordRequest):
+    users = load_users()
+    email = req.email.lower().strip()
+    if email not in users:
+        raise HTTPException(status_code=404, detail="Email address not found. Please register first.")
+    
+    otp_code = f"{random.randint(100000, 999999)}"
+    OTP_STORE[email] = {
+        "otp": otp_code,
+        "timestamp": time.time()
+    }
+    print(f"[OTP Service] Generated 6-digit OTP {otp_code} for {email}")
+    return {
+        "status": "success",
+        "message": f"Verification OTP code sent to {email}",
+        "otp_code": otp_code
+    }
+
+
+@router.post("/auth/reset-password")
+def reset_password(req: ResetPasswordRequest):
+    users = load_users()
+    email = req.email.lower().strip()
+    if email not in users:
+        raise HTTPException(status_code=404, detail="Email address not found")
+    
+    otp_entry = OTP_STORE.get(email)
+    if not otp_entry:
+        raise HTTPException(status_code=400, detail="No active OTP request found for this email. Please request a new OTP.")
+    
+    # Check expiry (10 minutes)
+    if time.time() - otp_entry["timestamp"] > 600:
+        OTP_STORE.pop(email, None)
+        raise HTTPException(status_code=400, detail="OTP verification code expired. Please request a new OTP.")
+    
+    if req.otp.strip() != otp_entry["otp"]:
+        raise HTTPException(status_code=400, detail="Invalid OTP verification code. Please check and try again.")
+    
+    # Hashes new password and saves user db
+    users[email]["password"] = hash_password(req.new_password)
+    save_users(users)
+    OTP_STORE.pop(email, None)
+    
+    print(f"[Auth] Password reset successfully for {email}")
+    return {
+        "status": "success",
+        "message": "Password reset successfully! You can now log in with your new password."
+    }
 
 
 # ════════════════════════════════════════════════
