@@ -1,0 +1,41 @@
+services:
+  # ── FastAPI Backend Web Service ─────────────────────────────────────────
+  - type: web
+    name: career-intelligence-backend
+    env: docker
+    dockerfilePath: ./Dockerfile.backend
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: GROQ_API_KEY
+        sync: false
+      - key: PINECONE_API_KEY
+        sync: false
+      - key: PINECONE_INDEX_NAME
+        value: career-intelligence
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: LANGCHAIN_API_KEY
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_ORIGINS
+        value: "*"
+
+  # ── React Frontend Static Site ──────────────────────────────────────────
+  - type: web
+    name: career-intelligence-frontend
+    env: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: career-intelligence-backend
+          property: url
