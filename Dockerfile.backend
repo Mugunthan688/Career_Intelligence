@@ -2,15 +2,9 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# Install system build dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Python requirements (using PyTorch CPU index to keep image light)
+# Install Python requirements
 COPY requirements.txt .
-RUN pip install --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cpu -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application source code
 COPY . .
