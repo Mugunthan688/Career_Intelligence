@@ -17,11 +17,11 @@ const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null
   return (
     <div style={{
-      background: 'rgba(12,15,26,0.97)',
-      border: '1px solid rgba(176,110,255,0.3)',
+      background: 'rgba(13,15,24,0.97)',
+      border: '1px solid rgba(167,139,250,0.18)',
       borderRadius: 12, padding: '12px 16px',
-      backdropFilter: 'blur(20px)',
-      boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+      backdropFilter: 'blur(16px)',
+      boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
     }}>
       <p style={{
         fontFamily: '"Space Grotesk",sans-serif',
@@ -65,15 +65,15 @@ export default function SalaryChart({ data = DEFAULT_DATA, currentSalary = null 
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
           <defs>
-            {/* Purple gradient — avg */}
+            {/* Violet gradient — avg */}
             <linearGradient id="grad-avg" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%"  stopColor="#B06EFF" stopOpacity={0.35} />
-              <stop offset="95%" stopColor="#B06EFF" stopOpacity={0}    />
+              <stop offset="5%"  stopColor="#A78BFA" stopOpacity={0.30} />
+              <stop offset="95%" stopColor="#A78BFA" stopOpacity={0}    />
             </linearGradient>
-            {/* Cyan gradient — max */}
+            {/* Teal gradient — max */}
             <linearGradient id="grad-max" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%"  stopColor="#22D3EE" stopOpacity={0.15} />
-              <stop offset="95%" stopColor="#22D3EE" stopOpacity={0}    />
+              <stop offset="5%"  stopColor="#2DD4BF" stopOpacity={0.12} />
+              <stop offset="95%" stopColor="#2DD4BF" stopOpacity={0}    />
             </linearGradient>
             {/* Glow filter */}
             <filter id="glow">
@@ -84,7 +84,7 @@ export default function SalaryChart({ data = DEFAULT_DATA, currentSalary = null 
 
           <CartesianGrid
             strokeDasharray="3 3"
-            stroke="rgba(176,110,255,0.07)"
+            stroke="rgba(167,139,250,0.06)"
             vertical={false}
           />
 
@@ -122,14 +122,14 @@ export default function SalaryChart({ data = DEFAULT_DATA, currentSalary = null 
           {/* Max range */}
           <Area
             type="monotone" dataKey="max" name="Max"
-            stroke="#22D3EE" strokeWidth={1.5} strokeDasharray="5 3"
+            stroke="#2DD4BF" strokeWidth={1.5} strokeDasharray="5 3"
             fill="url(#grad-max)"
           />
 
           {/* Average — hero line */}
           <Area
             type="monotone" dataKey="avg" name="Avg"
-            stroke="#B06EFF" strokeWidth={2.5}
+            stroke="#A78BFA" strokeWidth={2.5}
             fill="url(#grad-avg)"
             filter="url(#glow)"
           />
@@ -137,8 +137,8 @@ export default function SalaryChart({ data = DEFAULT_DATA, currentSalary = null 
           {/* Min range */}
           <Area
             type="monotone" dataKey="min" name="Min"
-            stroke="#8B5CF6" strokeWidth={1} strokeDasharray="5 3"
-            fill="none" opacity={0.6}
+            stroke="#7C3AED" strokeWidth={1} strokeDasharray="5 3"
+            fill="none" opacity={0.5}
           />
         </AreaChart>
       </ResponsiveContainer>

@@ -6,17 +6,27 @@ STAR methodology, power action verbs, and role-specific technical terms.
 
 import json
 import re
-from langchain_groq import ChatGroq
-from pydantic import SecretStr
+try:
+    from langchain_groq import ChatGroq
+    from pydantic import SecretStr
+except Exception:
+    ChatGroq = None
+    SecretStr = None
+
 from backend.config import settings
 
 
 class ResumeBuilderAgent:
     def __init__(self):
-        self.llm = ChatGroq(
-            api_key=SecretStr(settings.GROQ_API_KEY),
-            model="llama-3.3-70b-versatile",
-        )
+        self.llm = None
+        if ChatGroq is not None and settings.GROQ_API_KEY and settings.GROQ_API_KEY != "your_groq_api_key_here":
+            try:
+                self.llm = ChatGroq(
+                    api_key=SecretStr(settings.GROQ_API_KEY) if SecretStr else settings.GROQ_API_KEY,
+                    model="llama-3.3-70b-versatile",
+                )
+            except Exception:
+                self.llm = None
 
     def run(
         self,

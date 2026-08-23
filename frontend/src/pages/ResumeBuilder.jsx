@@ -32,7 +32,6 @@ export default function ResumeBuilder() {
         setAtsReport(res.data.ats_report)
         toast.success('ATS Alignment Analysis & Keyword Audit complete!')
       } else if (res.data && res.data.resume_data) {
-        // Fallback structure if report embedded inside resume_data
         setAtsReport(res.data.resume_data.ats_report || null)
         toast.success('Resume analysis complete!')
       }
@@ -47,26 +46,21 @@ export default function ResumeBuilder() {
     }
   }
 
-  // Pinpoint ATS Pass Probability
   const passProbability = atsReport?.ats_score ?? 84
   const kwAnalysis = atsReport?.keyword_analysis || {}
 
-  // 1. Correct Keywords Present in Resume
   const presentKeywords = kwAnalysis.jd_skills_found?.length > 0
     ? kwAnalysis.jd_skills_found
     : ['Python', 'FastAPI', 'REST APIs', 'Git', 'Docker', 'System Architecture']
 
-  // 2. Missing Keywords for Role
   const missingKeywords = kwAnalysis.jd_skills_missing?.length > 0
     ? kwAnalysis.jd_skills_missing
     : ['PyTorch', 'Transformers', 'RAG Pipelines', 'Pinecone', 'CUDA', 'Model Quantization']
 
-  // 3. Suggested High-Impact ATS Keywords & Verbs
   const impactKeywords = kwAnalysis.suggested_impact_keywords?.length > 0
     ? kwAnalysis.suggested_impact_keywords
     : ['Architected', 'Engineered', 'Spearheaded', 'Optimized', 'Orchestrated', 'Quantified', 'Deployed', 'Streamlined', 'TensorRT-LLM', 'Fine-Tuning']
 
-  // Positive & Negative Impact Factors
   const positiveImpact = atsReport?.passed_checks || [
     'Standard parseable PDF structure verified',
     'Contact information parseable at document top',
@@ -89,247 +83,227 @@ export default function ResumeBuilder() {
   return (
     <div className="app-layout">
       <Navbar />
-      <main className="app-main" style={{ padding: '32px 40px' }}>
-        <div style={{ maxWidth: 1320, margin: '0 auto' }} className="page-enter">
+      <main className="app-main" style={{ padding: '32px 36px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }} className="page-enter">
           
           {/* Header */}
           <div style={{ marginBottom: 24 }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--violet)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4 }} className="font-mono">
-              ▶ RESUME AI EDITOR — ATS KEYWORD & IMPACT AUDIT
+            <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--aurora-teal)', textTransform: 'uppercase', letterSpacing: '0.12em', marginBottom: 5, fontFamily: '"JetBrains Mono", monospace' }}>
+              Resume AI Editor — ATS Keyword & Impact Audit
             </div>
-            <h1 style={{ fontSize: 32, fontWeight: 800, color: '#FFF' }} className="font-display">
-              Resume AI Editor Studio
+            <h1 style={{ fontSize: 30, fontWeight: 800, color: '#F8FAFC', letterSpacing: '-0.02em' }} className="font-display">
+              Resume AI Studio & Keyword Audit
             </h1>
-            <p style={{ fontSize: 14, color: 'var(--txt-secondary)', marginTop: 4 }}>
-              Upload candidate resume PDF to evaluate pinpoint ATS pass probability, present vs missing keywords, positive/negative impact factors, and high-impact ATS keywords.
-            </p>
           </div>
 
           {/* Top PDF Upload Form */}
-          <form onSubmit={handleBuildSubmit} className="glass-panel" style={{ padding: 22, marginBottom: 28, display: 'flex', gap: 18, alignItems: 'center' }}>
+          <form onSubmit={handleBuildSubmit} className="glass-panel" style={{ padding: 20, marginBottom: 24, display: 'flex', gap: 14, alignItems: 'center' }}>
             <div style={{ flex: 1 }}>
-              <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--txt-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
-                Upload Resume PDF:
-              </label>
               <input
                 type="file"
                 accept=".pdf"
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
-                style={{ fontSize: 13, color: 'var(--txt-secondary)' }}
+                style={{ fontSize: 12, color: 'var(--txt-secondary)' }}
               />
             </div>
 
             <div style={{ flex: 1 }}>
-              <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: 'var(--txt-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>
-                Target Job Role:
-              </label>
               <input
                 type="text"
                 className="glass-input"
                 style={{ width: '100%' }}
-                placeholder="Target Role (e.g. AI Developer / Data Scientist / React Engineer)"
+                placeholder="Target Role (e.g. AI Developer / React Engineer)"
                 value={targetRole}
                 onChange={(e) => setTargetRole(e.target.value)}
               />
             </div>
 
-            <div style={{ alignSelf: 'flex-end' }}>
-              <button type="submit" className="btn-primary" disabled={loading} style={{ padding: '12px 28px', minWidth: 220 }}>
-                {loading ? '⚡ Analyzing Keywords...' : '🎯 Analyze ATS Alignment & Keywords'}
-              </button>
-            </div>
+            <button type="submit" className="btn-primary" disabled={loading} style={{ padding: '11px 22px', minWidth: 180, flexShrink: 0 }}>
+              {loading ? 'Analyzing...' : '🎯 Audit Keywords'}
+            </button>
           </form>
 
-          {/* 🎯 Pinpoint ATS Pass Probability Banner */}
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-panel" style={{ padding: 26, marginBottom: 28, border: '1px solid rgba(34, 211, 238, 0.25)', background: 'rgba(12, 17, 34, 0.85)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-              <div>
-                <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--cyan)', textTransform: 'uppercase', letterSpacing: '0.1em' }} className="font-mono">
-                  PINPOINT ATS PASS ACCURACY SCORE
-                </div>
-                <h3 style={{ fontSize: 22, fontWeight: 800, color: '#FFF' }} className="font-display">
-                  ATS Pass Probability Assessment
-                </h3>
-              </div>
-
-              <span style={{
-                padding: '8px 18px', borderRadius: 20, fontSize: 12, fontWeight: 800,
-                background: passProbability >= 75 ? 'rgba(16, 185, 129, 0.15)' : passProbability >= 50 ? 'rgba(245, 158, 11, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-                border: `1px solid ${passProbability >= 75 ? '#10B981' : passProbability >= 50 ? '#F59E0B' : '#EF4444'}`,
-                color: passProbability >= 75 ? '#10B981' : passProbability >= 50 ? '#F59E0B' : '#EF4444',
-              }}>
-                {passProbability >= 75 ? '🟢 HIGH ATS PASS PROBABILITY (INTERVIEW READY)' : passProbability >= 50 ? '🟡 MODERATE ALIGNMENT (KEYWORDS NEEDED)' : '🔴 LOW ATS COMPATIBILITY'}
-              </span>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
-              {/* Dial Meter */}
-              <div style={{ position: 'relative', width: 120, height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <svg width="120" height="120" viewBox="0 0 36 36">
-                  <path
-                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                    fill="none"
-                    stroke="rgba(255, 255, 255, 0.08)"
-                    strokeWidth="3"
-                  />
-                  <path
-                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                    fill="none"
-                    stroke={passProbability >= 75 ? '#10B981' : passProbability >= 50 ? '#F59E0B' : '#EF4444'}
-                    strokeWidth="3.2"
-                    strokeDasharray={`${passProbability}, 100`}
-                    strokeLinecap="round"
-                  />
-                </svg>
-                <div style={{ position: 'absolute', textAlign: 'center' }}>
-                  <div style={{ fontSize: 28, fontWeight: 900, color: '#FFF' }} className="font-outfit">
-                    {passProbability}%
+          {/* Bento Grid */}
+          <div className="bento-grid" style={{ marginBottom: 20 }}>
+            {/* 🎯 Pinpoint ATS Pass Probability Tile */}
+            <div className="bento-6">
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bento-tile bento-tile-aurora">
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
+                  <div>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--aurora-teal)', textTransform: 'uppercase', letterSpacing: '0.1em', fontFamily: '"JetBrains Mono", monospace' }}>
+                      Pinpoint ATS Pass Accuracy
+                    </div>
+                    <h3 style={{ fontSize: 18, fontWeight: 700, color: '#F8FAFC' }} className="font-display">
+                      ATS Pass Probability Assessment
+                    </h3>
                   </div>
-                  <div style={{ fontSize: 8, color: 'var(--txt-muted)', textTransform: 'uppercase' }} className="font-mono">
-                    PASS RATE
-                  </div>
-                </div>
-              </div>
 
-              {/* Sub-Score Metrics */}
-              <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
-                {[
-                  { label: 'Keyword Match', val: atsReport?.keyword_score ?? 82, col: 'var(--cyan)' },
-                  { label: 'ATS Format', val: atsReport?.format_score ?? 95, col: 'var(--green)' },
-                  { label: 'Section Structure', val: atsReport?.section_score ?? 90, col: 'var(--violet)' },
-                  { label: 'Content Quality', val: atsReport?.content_score ?? 80, col: 'var(--pink)' },
-                ].map(s => (
-                  <div key={s.label} style={{ padding: '12px 16px', background: 'rgba(255,255,255,0.03)', borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
-                    <div style={{ fontSize: 12, color: 'var(--txt-secondary)' }}>{s.label}</div>
-                    <div style={{ fontSize: 20, fontWeight: 800, color: s.col, marginTop: 4 }}>{s.val}%</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* 🏷️ 3-COLUMN KEYWORD ANALYSIS WORKSPACE */}
-          <div style={{ marginBottom: 28 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--cyan)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 14 }} className="font-mono">
-              🏷️ KEYWORD AUDIT & ATS ALIGNMENT MATRIX — {targetRole.toUpperCase()}
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
-              
-              {/* 1. Correct Keywords Present in Resume */}
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="glass-panel" style={{ padding: 22, border: '1px solid rgba(16, 185, 129, 0.25)', background: 'rgba(16, 185, 129, 0.04)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', textTransform: 'uppercase', letterSpacing: '0.08em' }} className="font-mono">
-                    🟢 CORRECT KEYWORDS IN RESUME
-                  </div>
-                  <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 10, background: 'rgba(16, 185, 129, 0.2)', color: 'var(--green)', fontWeight: 800 }}>
-                    {presentKeywords.length} Found
+                  <span className={passProbability >= 75 ? 'pill-green' : 'pill-amber'} style={{ padding: '6px 14px', borderRadius: 20, fontSize: 11, fontWeight: 700 }}>
+                    {passProbability >= 75 ? '🟢 HIGH PASS RATE' : '🟡 KEYWORDS NEEDED'}
                   </span>
                 </div>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 28, flexWrap: 'wrap' }}>
+                  {/* Dial Meter */}
+                  <div style={{ position: 'relative', width: 100, height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <svg width="100" height="100" viewBox="0 0 36 36">
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="rgba(255, 255, 255, 0.06)"
+                        strokeWidth="3"
+                      />
+                      <path
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke={passProbability >= 75 ? '#34D399' : passProbability >= 50 ? '#FBBF24' : '#FB7185'}
+                        strokeWidth="3.2"
+                        strokeDasharray={`${passProbability}, 100`}
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    <div style={{ position: 'absolute', textAlign: 'center' }}>
+                      <div style={{ fontSize: 24, fontWeight: 800, color: '#F8FAFC' }} className="font-outfit">
+                        {passProbability}%
+                      </div>
+                      <div style={{ fontSize: 7, color: 'var(--txt-muted)', textTransform: 'uppercase', fontFamily: '"JetBrains Mono", monospace' }}>
+                        PASS RATE
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Sub-Score Metrics */}
+                  <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, minWidth: 280 }}>
+                    {[
+                      { label: 'Keyword Match', val: atsReport?.keyword_score ?? 82, col: 'var(--aurora-teal)' },
+                      { label: 'ATS Format', val: atsReport?.format_score ?? 95, col: 'var(--aurora-emerald)' },
+                      { label: 'Section Structure', val: atsReport?.section_score ?? 90, col: 'var(--aurora-violet)' },
+                      { label: 'Content Quality', val: atsReport?.content_score ?? 80, col: 'var(--aurora-rose)' },
+                    ].map(s => (
+                      <div key={s.label} className="glass-card" style={{ padding: '12px 14px' }}>
+                        <div style={{ fontSize: 10, color: 'var(--txt-muted)', textTransform: 'uppercase', fontFamily: '"JetBrains Mono", monospace' }}>{s.label}</div>
+                        <div style={{ fontSize: 20, fontWeight: 800, color: s.col, marginTop: 4 }} className="font-outfit">{s.val}%</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* 🏷️ 3-COLUMN KEYWORD ANALYSIS */}
+            <div className="bento-2">
+              <div className="glass-panel" style={{ padding: 20, height: '100%', borderLeft: '3px solid var(--aurora-emerald)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                  <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--aurora-emerald)', textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: '"JetBrains Mono", monospace' }}>
+                    Correct Keywords in Resume
+                  </div>
+                  <span style={{ fontSize: 10, padding: '2px 7px', borderRadius: 8, background: 'rgba(52,211,153,0.15)', color: 'var(--aurora-emerald)', fontWeight: 700 }}>
+                    {presentKeywords.length} Found
+                  </span>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                   {presentKeywords.map((kw, i) => (
-                    <span key={i} style={{ fontSize: 12, padding: '4px 12px', borderRadius: 16, background: 'rgba(16, 185, 129, 0.12)', border: '1px solid rgba(16, 185, 129, 0.3)', color: '#34D399', fontWeight: 600 }}>
+                    <span key={i} className="pill-green" style={{ fontSize: 11, padding: '3px 8px', borderRadius: 6, fontWeight: 600 }}>
                       ✓ {kw}
                     </span>
                   ))}
                 </div>
-              </motion.div>
+              </div>
+            </div>
 
-              {/* 2. Missing Keywords Needed for Role */}
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="glass-panel" style={{ padding: 22, border: '1px solid rgba(239, 68, 68, 0.25)', background: 'rgba(239, 68, 68, 0.04)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--rose)', textTransform: 'uppercase', letterSpacing: '0.08em' }} className="font-mono">
-                    🔴 MISSING KEYWORDS (ADD THESE)
+            <div className="bento-2">
+              <div className="glass-panel" style={{ padding: 20, height: '100%', borderLeft: '3px solid var(--aurora-rose)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                  <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--aurora-rose)', textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: '"JetBrains Mono", monospace' }}>
+                    Missing Keywords
                   </div>
-                  <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 10, background: 'rgba(239, 68, 68, 0.2)', color: 'var(--rose)', fontWeight: 800 }}>
+                  <span style={{ fontSize: 10, padding: '2px 7px', borderRadius: 8, background: 'rgba(251,113,133,0.15)', color: 'var(--aurora-rose)', fontWeight: 700 }}>
                     {missingKeywords.length} Missing
                   </span>
                 </div>
-
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                   {missingKeywords.map((kw, i) => (
-                    <span key={i} style={{ fontSize: 12, padding: '4px 12px', borderRadius: 16, background: 'rgba(239, 68, 68, 0.12)', border: '1px solid rgba(239, 68, 68, 0.3)', color: '#F87171', fontWeight: 600 }}>
+                    <span key={i} className="pill-rose" style={{ fontSize: 11, padding: '3px 8px', borderRadius: 6, fontWeight: 600 }}>
                       ✗ {kw}
                     </span>
                   ))}
                 </div>
-              </motion.div>
+              </div>
+            </div>
 
-              {/* 3. High-Impact Recommended ATS Keywords */}
-              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="glass-panel" style={{ padding: 22, border: '1px solid rgba(139, 92, 246, 0.25)', background: 'rgba(139, 92, 246, 0.04)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: '#C084FC', textTransform: 'uppercase', letterSpacing: '0.08em' }} className="font-mono">
-                    ⚡ HIGH-IMPACT SUGGESTED ATS WORDS
+            <div className="bento-2">
+              <div className="glass-panel" style={{ padding: 20, height: '100%', borderLeft: '3px solid var(--aurora-violet)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                  <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--aurora-violet)', textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: '"JetBrains Mono", monospace' }}>
+                    Suggested Impact Words
                   </div>
-                  <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 10, background: 'rgba(139, 92, 246, 0.2)', color: '#C084FC', fontWeight: 800 }}>
+                  <span style={{ fontSize: 10, padding: '2px 7px', borderRadius: 8, background: 'rgba(167,139,250,0.15)', color: 'var(--aurora-violet)', fontWeight: 700 }}>
                     Boost Score
                   </span>
                 </div>
-
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                   {impactKeywords.map((verb, i) => (
-                    <span key={i} style={{ fontSize: 12, padding: '4px 12px', borderRadius: 16, background: 'rgba(139, 92, 246, 0.15)', border: '1px solid rgba(139, 92, 246, 0.3)', color: '#E9D5FF', fontWeight: 600 }}>
+                    <span key={i} className="pill-teal" style={{ fontSize: 11, padding: '3px 8px', borderRadius: 6, fontWeight: 600 }}>
                       ⚡ {verb}
                     </span>
                   ))}
                 </div>
-              </motion.div>
-
+              </div>
             </div>
-          </div>
 
-          {/* 🟢 POSITIVE & 🔴 NEGATIVE IMPACT ANALYSIS */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 28 }}>
-            
-            {/* Positive Impact Factors */}
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="glass-panel" style={{ padding: 24, border: '1px solid rgba(16, 185, 129, 0.25)', background: 'rgba(16, 185, 129, 0.04)' }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--green)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 8 }} className="font-mono">
-                <span>🟢</span> POSITIVE IMPACT FACTORS (HELPING ATS SCORE)
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {positiveImpact.map((item, i) => (
-                  <div key={i} style={{ fontSize: 13, color: '#E2E8F0', display: 'flex', gap: 10, lineHeight: 1.5 }}>
-                    <span style={{ color: 'var(--green)', fontWeight: 800 }}>✓</span>
-                    <span>{typeof item === 'string' ? item : item.check || item.title}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Negative Impact Factors & Red Flags */}
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="glass-panel" style={{ padding: 24, border: '1px solid rgba(239, 68, 68, 0.25)', background: 'rgba(239, 68, 68, 0.04)' }}>
-              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--rose)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 8 }} className="font-mono">
-                <span>🔴</span> NEGATIVE IMPACT FACTORS & RED FLAGS
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {negativeImpact.map((item, i) => (
-                  <div key={i} style={{ fontSize: 13, color: '#E2E8F0', display: 'flex', gap: 10, lineHeight: 1.5 }}>
-                    <span style={{ color: 'var(--rose)', fontWeight: 800 }}>⚠</span>
-                    <span>{typeof item === 'string' ? item : item.desc || item.title}</span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-          </div>
-
-          {/* 🔧 ACTIONABLE ATS ALIGNMENT STEPS */}
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="glass-panel" style={{ padding: 26 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--amber)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 14 }} className="font-mono">
-              🔧 ACTIONABLE ATS ALIGNMENT STEPS
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {fixesList.map((fix, i) => (
-                <div key={i} style={{ fontSize: 13, color: '#E2E8F0', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                  <span style={{ width: 22, height: 22, borderRadius: '50%', background: 'rgba(245,158,11,0.2)', color: '#F59E0B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 800, flexShrink: 0 }}>
-                    {i + 1}
-                  </span>
-                  <span style={{ marginTop: 2, lineHeight: 1.5 }}>{fix}</span>
+            {/* Positive & Negative Factors */}
+            <div className="bento-3">
+              <div className="glass-panel" style={{ padding: 20, height: '100%', borderLeft: '3px solid var(--aurora-emerald)' }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--aurora-emerald)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12, fontFamily: '"JetBrains Mono", monospace' }}>
+                  Positive Impact Factors
                 </div>
-              ))}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {positiveImpact.map((item, i) => (
+                    <div key={i} style={{ fontSize: 12, color: '#F8FAFC', display: 'flex', gap: 8, lineHeight: 1.4 }}>
+                      <span style={{ color: 'var(--aurora-emerald)', fontWeight: 800 }}>✓</span>
+                      <span>{typeof item === 'string' ? item : item.check || item.title}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-          </motion.div>
+
+            <div className="bento-3">
+              <div className="glass-panel" style={{ padding: 20, height: '100%', borderLeft: '3px solid var(--aurora-rose)' }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--aurora-rose)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12, fontFamily: '"JetBrains Mono", monospace' }}>
+                  Negative Impact Factors
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {negativeImpact.map((item, i) => (
+                    <div key={i} style={{ fontSize: 12, color: '#F8FAFC', display: 'flex', gap: 8, lineHeight: 1.4 }}>
+                      <span style={{ color: 'var(--aurora-rose)', fontWeight: 800 }}>⚠</span>
+                      <span>{typeof item === 'string' ? item : item.desc || item.title}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Actionable Steps */}
+            <div className="bento-6">
+              <div className="glass-panel" style={{ padding: 22, borderLeft: '3px solid var(--aurora-amber)' }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--aurora-amber)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12, fontFamily: '"JetBrains Mono", monospace' }}>
+                  Actionable ATS Alignment Steps
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {fixesList.map((fix, i) => (
+                    <div key={i} style={{ fontSize: 12, color: '#F8FAFC', display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                      <span style={{ width: 18, height: 18, borderRadius: '50%', background: 'rgba(251,191,36,0.15)', color: 'var(--aurora-amber)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 800, flexShrink: 0 }}>
+                        {i + 1}
+                      </span>
+                      <span style={{ lineHeight: 1.4 }}>{fix}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+          </div>
 
         </div>
       </main>

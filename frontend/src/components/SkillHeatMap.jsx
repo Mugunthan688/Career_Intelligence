@@ -18,16 +18,16 @@ export default function SkillHeatMap({ matched = [], missing = [] }) {
     <div className="glass-panel" style={{ padding: 28 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
         <div>
-          <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--txt-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--txt-muted)', textTransform: 'uppercase', letterSpacing: '0.08em', fontFamily: '"JetBrains Mono", monospace' }}>
             Skill Gap Matrix
           </div>
-          <h3 style={{ fontSize: 20, fontWeight: 800, color: '#FFF' }} className="font-display">
+          <h3 style={{ fontSize: 18, fontWeight: 700, color: '#F8FAFC' }} className="font-display">
             Target Skill Heatmap
           </h3>
         </div>
 
         {/* Filter Pills */}
-        <div style={{ display: 'flex', gap: 6, background: 'rgba(6, 8, 16, 0.6)', padding: 4, borderRadius: 12, border: '1px solid var(--border-subtle)' }}>
+        <div style={{ display: 'flex', gap: 6, background: 'rgba(8,9,14,0.6)', padding: 4, borderRadius: 10, border: '1px solid rgba(255,255,255,0.05)' }}>
           {[
             { id: 'all', label: `All (${skills.length})` },
             { id: 'matched', label: `Matched (${matched.length})` },
@@ -43,8 +43,8 @@ export default function SkillHeatMap({ matched = [], missing = [] }) {
                 fontWeight: 600,
                 border: 'none',
                 cursor: 'pointer',
-                background: filter === tab.id ? 'var(--violet)' : 'transparent',
-                color: filter === tab.id ? '#FFF' : 'var(--txt-secondary)',
+                background: filter === tab.id ? 'var(--aurora-violet)' : 'transparent',
+                color: filter === tab.id ? '#FFF' : 'var(--txt-muted)',
                 transition: 'all 0.2s ease',
               }}
             >
@@ -70,18 +70,18 @@ export default function SkillHeatMap({ matched = [], missing = [] }) {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.2, delay: index * 0.02 }}
                 style={{
-                  padding: '8px 16px',
-                  borderRadius: 12,
-                  fontSize: 13,
+                  padding: '7px 14px',
+                  borderRadius: 10,
+                  fontSize: 12,
                   fontWeight: 600,
                   display: 'flex',
                   alignItems: 'center',
-                  gap: 8,
-                  background: isMatched ? 'rgba(16, 185, 129, 0.12)' : 'rgba(244, 63, 94, 0.12)',
-                  border: `1px solid ${isMatched ? 'rgba(16, 185, 129, 0.35)' : 'rgba(244, 63, 94, 0.35)'}`,
-                  color: isMatched ? 'var(--green)' : 'var(--rose)',
-                  boxShadow: isMatched ? '0 0 12px rgba(16, 185, 129, 0.15)' : '0 0 12px rgba(244, 63, 94, 0.15)',
+                  gap: 6,
+                  background: isMatched ? 'rgba(52,211,153,0.10)' : 'rgba(251,113,133,0.10)',
+                  border: `1px solid ${isMatched ? 'rgba(52,211,153,0.22)' : 'rgba(251,113,133,0.22)'}`,
+                  color: isMatched ? 'var(--aurora-emerald)' : 'var(--aurora-rose)',
                   cursor: 'default',
+                  transition: 'transform 0.15s ease',
                 }}
               >
                 <span>{isMatched ? '✓' : '⚠'}</span>

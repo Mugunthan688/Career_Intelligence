@@ -1,5 +1,13 @@
 from typing import TypedDict, Any, cast
-from langgraph.graph import StateGraph, END
+
+try:
+    from langgraph.graph import StateGraph, END
+    HAS_LANGGRAPH = True
+except Exception:
+    HAS_LANGGRAPH = False
+    StateGraph = None
+    END = None
+
 from backend.agents.research_agent import ResearchAgent
 from backend.agents.screener_agent import ScreenerAgent
 from backend.agents.coach_agent import CoachAgent
@@ -72,24 +80,28 @@ def analytics_node(state: AgentState) -> AgentState:
 
 # ── Build LangGraph Pipeline ─────────────────────
 def build_pipeline() -> Any:
-    graph = StateGraph(cast(Any, AgentState))
+    if not HAS_LANGGRAPH or StateGraph is None:
+        return None
 
-    graph.add_node("research", research_node)
-    graph.add_node("screener", screener_node)
-    graph.add_node("coach", coach_node)
-    graph.add_node("analytics", analytics_node)
+    try:
+        graph = StateGraph(cast(Any, AgentState))
 
-    graph.set_entry_point("research")
-    graph.add_edge("research", "screener")
-    graph.add_edge("screener", "coach")
-    graph.add_edge("coach", "analytics")
-    graph.add_edge("analytics", END)
+        graph.add_node("research", research_node)
+        graph.add_node("screener", screener_node)
+        graph.add_node("coach", coach_node)
+        graph.add_node("analytics", analytics_node)
 
-    return graph.compile()
+        graph.set_entry_point("research")
+        graph.add_edge("research", "screener")
+        graph.add_edge("screener", "coach")
+        graph.add_edge("coach", "analytics")
+        graph.add_edge("analytics", END)
+
+        return graph.compile()
+    except Exception:
+        return None
 
 def run_pipeline(resume_text: str, job_role: str, company: str = "") -> dict:
-    pipeline = build_pipeline()
-
     initial_state: AgentState = {
         "resume_text": resume_text,
         "job_role": job_role,
@@ -100,11 +112,29 @@ def run_pipeline(resume_text: str, job_role: str, company: str = "") -> dict:
         "analytics_result": {}
     }
 
-    final_state: dict = pipeline.invoke(initial_state)
+    pipeline = build_pipeline()
+
+    if pipeline is not None:
+        try:
+            final_state: dict = pipeline.invoke(initial_state)
+            return {
+                "research": final_state.get("research_result", {}),
+                "screener": final_state.get("screener_result", {}),
+                "coach": final_state.get("coach_result", {}),
+                "analytics": final_state.get("analytics_result", {})
+            }
+        except Exception as e:
+            print(f"[Orchestrator] LangGraph error, running sequential fallback: {e}")
+
+    # Sequential node execution fallback
+    state = research_node(initial_state)
+    state = screener_node(state)
+    state = coach_node(state)
+    state = analytics_node(state)
 
     return {
-        "research": final_state.get("research_result", {}),
-        "screener": final_state.get("screener_result", {}),
-        "coach": final_state.get("coach_result", {}),
-        "analytics": final_state.get("analytics_result", {})
+        "research": state.get("research_result", {}),
+        "screener": state.get("screener_result", {}),
+        "coach": state.get("coach_result", {}),
+        "analytics": state.get("analytics_result", {})
     }

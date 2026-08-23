@@ -36,10 +36,10 @@ export default function CircularGauge({
   const offset = circumference - (clampedScore / 100) * circumference
 
   const gradients = {
-    purple: { start: '#8B5CF6', end: '#A855F7', glow: 'rgba(139,92,246,0.35)' },
-    cyan:   { start: '#06B6D4', end: '#38BDF8', glow: 'rgba(6,182,212,0.35)' },
-    green:  { start: '#10B981', end: '#34D399', glow: 'rgba(16,185,129,0.35)' },
-    rose:   { start: '#F43F5E', end: '#FB7185', glow: 'rgba(244,63,94,0.35)' },
+    purple: { start: '#A78BFA', end: '#7C3AED', glow: 'rgba(167,139,250,0.25)' },
+    cyan:   { start: '#2DD4BF', end: '#0891B2', glow: 'rgba(45,212,191,0.25)' },
+    green:  { start: '#34D399', end: '#059669', glow: 'rgba(52,211,153,0.25)' },
+    rose:   { start: '#FB7185', end: '#E11D48', glow: 'rgba(251,113,133,0.25)' },
   }
 
   const activeGradient = gradients[colorScheme] || gradients.purple
@@ -59,13 +59,13 @@ export default function CircularGauge({
           </filter>
         </defs>
 
-        {/* Track Background Circle */}
+        {/* Track Background */}
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="rgba(255, 255, 255, 0.07)"
+          stroke="rgba(255,255,255,0.05)"
           strokeWidth={strokeWidth}
         />
 
@@ -98,7 +98,7 @@ export default function CircularGauge({
           pointerEvents: 'none',
         }}
       >
-        <div style={{ fontSize: size * 0.25, fontWeight: 800, lineHeight: 1 }} className="font-outfit text-white">
+        <div style={{ fontSize: size * 0.25, fontWeight: 800, lineHeight: 1, color: '#F8FAFC' }} className="font-outfit">
           {currentScore}
           <span style={{ fontSize: size * 0.12, opacity: 0.65, fontWeight: 600 }}>%</span>
         </div>

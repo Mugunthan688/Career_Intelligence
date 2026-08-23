@@ -2,10 +2,10 @@ import React from 'react'
 import { motion } from 'framer-motion'
 
 const AGENT_NODES = [
-  { id: 'research',  name: 'Research Agent',  icon: '🔍', color: '#8B5CF6', desc: 'Market & Company Search' },
-  { id: 'screener',  name: 'Screener Agent',  icon: '🎯', color: '#22D3EE', desc: 'Resume Match Scoring'    },
-  { id: 'coach',     name: 'Coach Agent',     icon: '💬', color: '#EC4899', desc: 'Interview Q&A Builder'    },
-  { id: 'analytics', name: 'Analytics Agent', icon: '📊', color: '#10B981', desc: 'Skill Gap & Benchmarks'   },
+  { id: 'research',  name: 'Research Agent',  icon: '🔍', color: '#A78BFA', desc: 'Market & Company Search' },
+  { id: 'screener',  name: 'Screener Agent',  icon: '🎯', color: '#2DD4BF', desc: 'Resume Match Scoring'    },
+  { id: 'coach',     name: 'Coach Agent',     icon: '💬', color: '#FB7185', desc: 'Interview Q&A Builder'    },
+  { id: 'analytics', name: 'Analytics Agent', icon: '📊', color: '#34D399', desc: 'Skill Gap & Benchmarks'   },
 ]
 
 export default function AgentStatusBar({ activeAgent, doneAgents = [] }) {
@@ -19,10 +19,10 @@ export default function AgentStatusBar({ activeAgent, doneAgents = [] }) {
         marginBottom: 28,
         position: 'relative',
         overflow: 'hidden',
-        border: '1px solid rgba(176, 110, 255, 0.25)',
+        border: '1px solid rgba(167,139,250,0.18)',
       }}
     >
-      {/* HUD Accent Top Bar */}
+      {/* Aurora Accent Top Bar */}
       <div
         style={{
           position: 'absolute',
@@ -30,14 +30,16 @@ export default function AgentStatusBar({ activeAgent, doneAgents = [] }) {
           left: 0,
           right: 0,
           height: 2,
-          background: 'linear-gradient(90deg, #22D3EE, #B06EFF, #10B981)',
+          background: 'linear-gradient(90deg, #2DD4BF, #A78BFA, #34D399)',
+          backgroundSize: '200% 100%',
+          animation: 'shimmer-flow 3s linear infinite',
         }}
       />
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-            <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--cyan)', letterSpacing: '0.12em', textTransform: 'uppercase' }} className="font-mono">
+            <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--aurora-teal)', letterSpacing: '0.12em', textTransform: 'uppercase', fontFamily: '"JetBrains Mono", monospace' }}>
               ▶ LANGGRAPH AGENT ORCHESTRATOR
             </span>
             <span className="cyber-badge" style={{ fontSize: 9 }}>4-NODE PIPELINE</span>
@@ -52,7 +54,7 @@ export default function AgentStatusBar({ activeAgent, doneAgents = [] }) {
             <div style={{ fontSize: 11, color: 'var(--txt-muted)', fontFamily: 'JetBrains Mono, monospace' }}>
               PIPELINE PROGRESS
             </div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: doneAgents.length === 4 ? 'var(--green)' : 'var(--cyan)' }} className="font-mono">
+            <div style={{ fontSize: 16, fontWeight: 800, color: doneAgents.length === 4 ? 'var(--aurora-emerald)' : 'var(--aurora-teal)', fontFamily: '"JetBrains Mono", monospace' }}>
               {percent}% COMPLETE
             </div>
           </div>
@@ -65,16 +67,16 @@ export default function AgentStatusBar({ activeAgent, doneAgents = [] }) {
         </div>
       </div>
 
-      {/* Live Pipeline Progress Meter */}
-      <div style={{ height: 4, background: 'rgba(255, 255, 255, 0.05)', borderRadius: 2, overflow: 'hidden', marginBottom: 24 }}>
+      {/* Aurora Progress Bar */}
+      <div style={{ height: 3, background: 'rgba(255,255,255,0.05)', borderRadius: 2, overflow: 'hidden', marginBottom: 24 }}>
         <motion.div
           initial={{ width: '0%' }}
           animate={{ width: `${percent}%` }}
           transition={{ duration: 0.6 }}
           style={{
             height: '100%',
-            background: 'linear-gradient(90deg, #22D3EE, #B06EFF, #10B981)',
-            boxShadow: '0 0 10px #22D3EE',
+            background: 'linear-gradient(90deg, #2DD4BF, #A78BFA, #34D399)',
+            boxShadow: '0 0 8px rgba(45,212,191,0.4)',
           }}
         />
       </div>
@@ -113,26 +115,26 @@ export default function AgentStatusBar({ activeAgent, doneAgents = [] }) {
             >
               {/* Node Icon Circle */}
               <motion.div
-                animate={isActive ? { scale: [1, 1.15, 1] } : { scale: 1 }}
-                transition={isActive ? { repeat: Infinity, duration: 1.4 } : {}}
+                animate={isActive ? { scale: [1, 1.08, 1] } : { scale: 1 }}
+                transition={isActive ? { repeat: Infinity, duration: 1.6 } : {}}
                 style={{
-                  width: 54,
-                  height: 54,
-                  borderRadius: 16,
+                  width: 52,
+                  height: 52,
+                  borderRadius: 15,
                   background: isDone
-                    ? 'linear-gradient(135deg, #10B981 0%, #059669 100%)'
+                    ? 'linear-gradient(135deg, #34D399 0%, #059669 100%)'
                     : isActive
-                    ? `linear-gradient(135deg, ${agent.color} 0%, #3B82F6 100%)`
-                    : 'rgba(14, 20, 40, 0.95)',
-                  border: `2px solid ${isDone ? '#10B981' : isActive ? agent.color : 'rgba(176, 110, 255, 0.2)'}`,
+                    ? `${agent.color}22`
+                    : 'rgba(13,15,24,0.9)',
+                  border: `1px solid ${isDone ? 'rgba(52,211,153,0.5)' : isActive ? `${agent.color}60` : 'rgba(255,255,255,0.08)'}`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontSize: 22,
+                  fontSize: 20,
                   boxShadow: isDone
-                    ? '0 0 20px rgba(16, 185, 129, 0.5)'
+                    ? '0 0 16px rgba(52,211,153,0.3)'
                     : isActive
-                    ? `0 0 25px ${agent.color}88`
+                    ? `0 0 18px ${agent.color}55`
                     : 'none',
                   transition: 'all 0.3s ease',
                 }}
@@ -141,10 +143,10 @@ export default function AgentStatusBar({ activeAgent, doneAgents = [] }) {
               </motion.div>
 
               <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 13, fontWeight: 700, color: isDone ? '#10B981' : isActive ? '#FFF' : 'var(--txt-secondary)' }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: isDone ? 'var(--aurora-emerald)' : isActive ? '#F8FAFC' : 'var(--txt-secondary)' }}>
                   {agent.name}
                 </div>
-                <div style={{ fontSize: 10, color: 'var(--txt-muted)', marginTop: 2, fontFamily: 'JetBrains Mono, monospace' }}>
+                <div style={{ fontSize: 10, color: 'var(--txt-muted)', marginTop: 2, fontFamily: '"JetBrains Mono", monospace' }}>
                   {agent.desc}
                 </div>
               </div>

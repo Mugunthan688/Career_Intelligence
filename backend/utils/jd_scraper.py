@@ -5,7 +5,11 @@ job board URLs using Tavily search + direct content extraction.
 """
 
 import re
-from tavily import TavilyClient
+try:
+    from tavily import TavilyClient
+except Exception:
+    TavilyClient = None
+
 from backend.config import settings
 
 

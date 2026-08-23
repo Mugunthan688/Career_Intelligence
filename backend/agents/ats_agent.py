@@ -7,8 +7,13 @@ actionable fixes for each issue found.
 
 import json
 import re
-from langchain_groq import ChatGroq
-from pydantic import SecretStr
+try:
+    from langchain_groq import ChatGroq
+    from pydantic import SecretStr
+except Exception:
+    ChatGroq = None
+    SecretStr = None
+
 from backend.config import settings
 
 
@@ -29,6 +34,22 @@ REQUIRED_SECTIONS = [
 
 # ── Common ATS-friendly keywords by category ──────
 ATS_KEYWORDS = {
+    "ai_ml": [
+        "python", "pytorch", "tensorflow", "scikit-learn",
+        "langchain", "langgraph", "rag", "fine-tuning",
+        "pinecone", "transformers", "llm", "groq",
+        "embeddings", "vector database", "huggingface",
+    ],
+    "backend": [
+        "fastapi", "django", "flask", "postgresql",
+        "redis", "docker", "kubernetes", "rest api",
+        "graphql", "microservices", "jwt", "oauth",
+        "celery", "rabbitmq", "aws", "ci/cd",
+    ],
+    "general_tech": [
+        "git", "linux", "agile", "scrum", "unit testing",
+        "system design", "performance optimization", "debugging",
+    ],
     "action_verbs": [
         "achieved", "built", "created", "delivered", "designed",
         "developed", "implemented", "improved", "led", "managed",
@@ -43,10 +64,15 @@ ATS_KEYWORDS = {
 
 class ATSAgent:
     def __init__(self):
-        self.llm = ChatGroq(
-            api_key=SecretStr(settings.GROQ_API_KEY),
-            model="llama-3.3-70b-versatile",
-        )
+        self.llm = None
+        if ChatGroq is not None and settings.GROQ_API_KEY and settings.GROQ_API_KEY != "your_groq_api_key_here":
+            try:
+                self.llm = ChatGroq(
+                    api_key=SecretStr(settings.GROQ_API_KEY) if SecretStr else settings.GROQ_API_KEY,
+                    model="llama-3.3-70b-versatile",
+                )
+            except Exception:
+                self.llm = None
 
     def run(self, resume_text: str, job_role: str = "", jd_skills: list | None = None) -> dict:
         jd_skills = jd_skills or []

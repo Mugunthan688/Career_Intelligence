@@ -16,5 +16,29 @@
     "email": "mugunthan_ats_test@gmail.com",
     "password": "$2b$12$Tx37uqUkdLJWHbivPNKvr.F88TGlJRxizohG/K92xBqhBDJ8eL9sS",
     "role": "job_seeker"
+  },
+  "user@example.com": {
+    "name": "Demo Job Seeker",
+    "email": "user@example.com",
+    "password": "pbkdf2:sha256:0e6162ffe2f171db0f9e35be3b55e133:91526104c967dcb3308a1653b58c355b720b25a1f4511445218374265715db46",
+    "role": "job_seeker"
+  },
+  "admin@example.com": {
+    "name": "Demo Admin",
+    "email": "admin@example.com",
+    "password": "pbkdf2:sha256:6aa9cafd38ec3348d46f5d31933e211f:f7849e7cbd339cba398faf70b530f8b74775ee9555d652ae444a789b04524034",
+    "role": "admin"
+  },
+  "recruiter@example.com": {
+    "name": "Demo Recruiter",
+    "email": "recruiter@example.com",
+    "password": "pbkdf2:sha256:9001b5a9682230f29316e0d3cbb39bde:1c273342126f23179397e239a591c0964b4343b0b7a8e8a8167865a0ffd91a88",
+    "role": "recruiter"
+  },
+  "test_1787467376@example.com": {
+    "name": "Test Candidate",
+    "email": "test_1787467376@example.com",
+    "password": "pbkdf2:sha256:b21b3f266c8258e0c47e7eaf62a31e22:3b76c04be34af1d35bafeef55eceb285c9bc7836220795a2d80e5055ead0a0f0",
+    "role": "job_seeker"
   }
 }

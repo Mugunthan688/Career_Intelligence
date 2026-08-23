@@ -4,8 +4,8 @@ import { motion } from 'framer-motion'
 import 'react-circular-progressbar/dist/styles.css'
 
 const getColor = (score) =>
-  score >= 75 ? '#10B981' :
-  score >= 50 ? '#F59E0B' : '#EF4444'
+  score >= 75 ? '#34D399' :
+  score >= 50 ? '#FBBF24' : '#FB7185'
 
 const getLabel = (score) =>
   score >= 75 ? 'ATS READY' :
@@ -23,7 +23,7 @@ const SubScore = ({ label, score, delay }) => {
         justifyContent: 'space-between', gap: 12,
         padding: '8px 12px', borderRadius: 8,
         background: 'rgba(255,255,255,0.02)',
-        border: '1px solid rgba(176,110,255,0.08)',
+        border: '1px solid rgba(255,255,255,0.05)',
       }}
     >
       <span style={{
@@ -83,11 +83,12 @@ export default function ATSScoreCard(props) {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
       style={{
-        background: 'rgba(15,18,33,0.9)',
-        border: '1px solid rgba(176,110,255,0.2)',
+        background: 'rgba(13,15,24,0.9)',
+        border: '1px solid rgba(167,139,250,0.15)',
         borderRadius: 18, padding: 24,
         position: 'relative', overflow: 'hidden',
-        backdropFilter: 'blur(24px)',
+        backdropFilter: 'blur(16px)',
+        height: '100%',
       }}
     >
       <div style={{
@@ -140,8 +141,8 @@ export default function ATSScoreCard(props) {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
         <div style={{
           padding: '10px', borderRadius: 10, textAlign: 'center',
-          background: 'rgba(16,185,129,0.06)',
-          border: '1px solid rgba(16,185,129,0.2)',
+          background: 'rgba(52,211,153,0.07)',
+          border: '1px solid rgba(52,211,153,0.18)',
         }}>
           <div style={{
             fontFamily: '"Space Grotesk",sans-serif',
@@ -154,8 +155,8 @@ export default function ATSScoreCard(props) {
         </div>
         <div style={{
           padding: '10px', borderRadius: 10, textAlign: 'center',
-          background: 'rgba(239,68,68,0.06)',
-          border: '1px solid rgba(239,68,68,0.2)',
+          background: 'rgba(251,113,133,0.07)',
+          border: '1px solid rgba(251,113,133,0.18)',
         }}>
           <div style={{
             fontFamily: '"Space Grotesk",sans-serif',

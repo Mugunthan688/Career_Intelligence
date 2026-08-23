@@ -27,26 +27,18 @@ export default function ResumeEditor({ resumeData, onChange }) {
   }
 
   return (
-    <div
-      style={{
-        background: '#0F172A',
-        border: '1px solid rgba(176,110,255,0.15)',
-        borderRadius: 16,
-        padding: 20,
-        boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-      }}
-    >
+    <div className="glass-panel" style={{ padding: 20 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-        <h3 style={{ fontFamily: '"Space Grotesk", sans-serif', fontWeight: 700, fontSize: 16, color: '#F0F2FF', margin: 0 }}>
+        <h3 style={{ fontWeight: 700, fontSize: 15, color: '#F8FAFC', margin: 0 }} className="font-display">
           ✏️ Edit Resume Content
         </h3>
-        <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 9, color: '#10B981', letterSpacing: 1.5 }}>
-          LIVE SYNCHRONIZED
+        <span style={{ fontFamily: '"JetBrains Mono", monospace', fontSize: 9, color: 'var(--aurora-emerald)', letterSpacing: 1.2, fontWeight: 700 }}>
+          LIVE SYNC
         </span>
       </div>
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 6, marginBottom: 16, borderBottom: '1px solid rgba(255,255,255,0.08)', pb: 8, overflowX: 'auto' }}>
+      <div style={{ display: 'flex', gap: 6, marginBottom: 16, borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: 8, overflowX: 'auto' }}>
         {[
           { id: 'header', label: 'Header' },
           { id: 'summary', label: 'Summary' },
@@ -58,16 +50,16 @@ export default function ResumeEditor({ resumeData, onChange }) {
             key={t.id}
             onClick={() => setActiveTab(t.id)}
             style={{
-              padding: '6px 14px',
+              padding: '5px 12px',
               borderRadius: 8,
               border: 'none',
-              background: activeTab === t.id ? 'rgba(176,110,255,0.15)' : 'transparent',
-              color: activeTab === t.id ? '#B06EFF' : '#475569',
+              background: activeTab === t.id ? 'rgba(167,139,250,0.15)' : 'transparent',
+              color: activeTab === t.id ? 'var(--aurora-violet)' : 'var(--txt-muted)',
               fontWeight: activeTab === t.id ? 700 : 500,
               fontSize: 12,
               cursor: 'pointer',
               whiteSpace: 'nowrap',
-              transition: 'all 0.2s',
+              transition: 'all 0.18s ease',
             }}
           >
             {t.label}
@@ -86,13 +78,13 @@ export default function ResumeEditor({ resumeData, onChange }) {
             { label: 'LinkedIn / Portfolio', field: 'linkedin' },
           ].map(f => (
             <div key={f.field}>
-              <label style={{ display: 'block', fontSize: 10, color: '#B06EFF', fontFamily: '"JetBrains Mono", monospace', marginBottom: 4 }}>
-                {f.label.toUpperCase()}
+              <label style={{ display: 'block', fontSize: 10, color: 'var(--txt-muted)', fontFamily: '"JetBrains Mono", monospace', marginBottom: 4, textTransform: 'uppercase' }}>
+                {f.label}
               </label>
               <input
                 value={resumeData[f.field] || ''}
                 onChange={e => handleFieldChange(f.field, e.target.value)}
-                className="neon-input"
+                className="glass-input"
                 style={{ width: '100%', padding: '8px 12px', fontSize: 13 }}
               />
             </div>
@@ -103,13 +95,13 @@ export default function ResumeEditor({ resumeData, onChange }) {
       {/* ── Summary Tab ── */}
       {activeTab === 'summary' && (
         <div>
-          <label style={{ display: 'block', fontSize: 10, color: '#B06EFF', fontFamily: '"JetBrains Mono", monospace', marginBottom: 4 }}>
-            PROFESSIONAL SUMMARY
+          <label style={{ display: 'block', fontSize: 10, color: 'var(--txt-muted)', fontFamily: '"JetBrains Mono", monospace', marginBottom: 4, textTransform: 'uppercase' }}>
+            Professional Summary
           </label>
           <textarea
             value={resumeData.summary || ''}
             onChange={e => handleFieldChange('summary', e.target.value)}
-            className="neon-input"
+            className="glass-input"
             rows={6}
             style={{ width: '100%', padding: '10px 12px', fontSize: 13, resize: 'vertical', lineHeight: 1.5 }}
           />
@@ -119,8 +111,8 @@ export default function ResumeEditor({ resumeData, onChange }) {
       {/* ── Skills Tab ── */}
       {activeTab === 'skills' && (
         <div>
-          <label style={{ display: 'block', fontSize: 10, color: '#B06EFF', fontFamily: '"JetBrains Mono", monospace', marginBottom: 8 }}>
-            TECHNICAL & SOFT SKILLS (ONE PER ITEM)
+          <label style={{ display: 'block', fontSize: 10, color: 'var(--txt-muted)', fontFamily: '"JetBrains Mono", monospace', marginBottom: 8, textTransform: 'uppercase' }}>
+            Technical & Soft Skills
           </label>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {(resumeData.skills || []).map((skill, idx) => (
@@ -128,12 +120,12 @@ export default function ResumeEditor({ resumeData, onChange }) {
                 <input
                   value={skill}
                   onChange={e => handleListChange('skills', idx, e.target.value)}
-                  className="neon-input"
+                  className="glass-input"
                   style={{ flex: 1, padding: '6px 10px', fontSize: 12 }}
                 />
                 <button
                   onClick={() => handleRemoveListItem('skills', idx)}
-                  style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#EF4444', borderRadius: 6, padding: '0 10px', cursor: 'pointer' }}
+                  style={{ background: 'rgba(251,113,133,0.1)', border: '1px solid rgba(251,113,133,0.3)', color: 'var(--aurora-rose)', borderRadius: 6, padding: '0 10px', cursor: 'pointer' }}
                 >
                   ×
                 </button>
@@ -141,15 +133,11 @@ export default function ResumeEditor({ resumeData, onChange }) {
             ))}
             <button
               onClick={() => handleAddListItem('skills')}
+              className="btn-secondary"
               style={{
-                marginTop: 6,
-                padding: '8px',
-                borderRadius: 8,
-                background: 'rgba(176,110,255,0.08)',
-                border: '1px dashed rgba(176,110,255,0.25)',
-                color: '#B06EFF',
-                fontSize: 12,
-                cursor: 'pointer',
+                marginTop: 4,
+                padding: '7px',
+                fontSize: 11,
               }}
             >
               + Add Skill
@@ -161,8 +149,8 @@ export default function ResumeEditor({ resumeData, onChange }) {
       {/* ── Experience Tab ── */}
       {activeTab === 'experience' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <label style={{ display: 'block', fontSize: 10, color: '#B06EFF', fontFamily: '"JetBrains Mono", monospace' }}>
-            WORK EXPERIENCE & HIGHLIGHTS
+          <label style={{ display: 'block', fontSize: 10, color: 'var(--txt-muted)', fontFamily: '"JetBrains Mono", monospace', textTransform: 'uppercase' }}>
+            Work Experience & Highlights
           </label>
           {(resumeData.experience || []).map((exp, idx) => {
             const expText = typeof exp === 'object' ? `${exp.title || ''} at ${exp.company || ''}: ${exp.description || ''}` : exp
@@ -171,13 +159,13 @@ export default function ResumeEditor({ resumeData, onChange }) {
                 <textarea
                   value={expText}
                   onChange={e => handleListChange('experience', idx, e.target.value)}
-                  className="neon-input"
+                  className="glass-input"
                   rows={2}
                   style={{ flex: 1, padding: '8px 10px', fontSize: 12, resize: 'vertical' }}
                 />
                 <button
                   onClick={() => handleRemoveListItem('experience', idx)}
-                  style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#EF4444', borderRadius: 6, padding: '0 10px', cursor: 'pointer' }}
+                  style={{ background: 'rgba(251,113,133,0.1)', border: '1px solid rgba(251,113,133,0.3)', color: 'var(--aurora-rose)', borderRadius: 6, padding: '0 10px', cursor: 'pointer' }}
                 >
                   ×
                 </button>
@@ -186,14 +174,10 @@ export default function ResumeEditor({ resumeData, onChange }) {
           })}
           <button
             onClick={() => handleAddListItem('experience')}
+            className="btn-secondary"
             style={{
-              padding: '8px',
-              borderRadius: 8,
-              background: 'rgba(176,110,255,0.08)',
-              border: '1px dashed rgba(176,110,255,0.25)',
-              color: '#B06EFF',
-              fontSize: 12,
-              cursor: 'pointer',
+              padding: '7px',
+              fontSize: 11,
             }}
           >
             + Add Experience Bullet
@@ -204,8 +188,8 @@ export default function ResumeEditor({ resumeData, onChange }) {
       {/* ── AI Improvements Tab ── */}
       {activeTab === 'improvements' && (
         <div>
-          <label style={{ display: 'block', fontSize: 10, color: '#10B981', fontFamily: '"JetBrains Mono", monospace', marginBottom: 8 }}>
-            ✓ AI IMPROVEMENTS APPLIED
+          <label style={{ display: 'block', fontSize: 10, color: 'var(--aurora-emerald)', fontFamily: '"JetBrains Mono", monospace', marginBottom: 8, textTransform: 'uppercase', fontWeight: 700 }}>
+            ✓ AI Improvements Applied
           </label>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             {(resumeData.improvements_made || ['Optimized summary for target role', 'Enhanced keywords']).map((imp, idx) => (
@@ -214,8 +198,8 @@ export default function ResumeEditor({ resumeData, onChange }) {
                 style={{
                   padding: '8px 12px',
                   borderRadius: 8,
-                  background: 'rgba(16,185,129,0.06)',
-                  border: '1px solid rgba(16,185,129,0.2)',
+                  background: 'rgba(52,211,153,0.06)',
+                  border: '1px solid rgba(52,211,153,0.2)',
                   color: '#A7F3D0',
                   fontSize: 12,
                 }}

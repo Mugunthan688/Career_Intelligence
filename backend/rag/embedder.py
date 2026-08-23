@@ -1,14 +1,32 @@
-from sentence_transformers import SentenceTransformer
+try:
+    from sentence_transformers import SentenceTransformer
+except Exception:
+    SentenceTransformer = None
+
 from backend.utils.helpers import chunk_text
 from backend.rag.pinecone_client import init_pinecone
 import uuid
 
-# ── Load Embedding Model ─────────────────────────
-model = SentenceTransformer("all-MiniLM-L6-v2")
+# ── Load Embedding Model Lazily ─────────────────
+_model = None
+
+def get_model():
+    global _model
+    if _model is None and SentenceTransformer is not None:
+        try:
+            _model = SentenceTransformer("all-MiniLM-L6-v2")
+        except Exception:
+            _model = None
+    return _model
 
 def embed_text(text: str) -> list:
-    embedding = model.encode(text).tolist()
-    return embedding
+    model = get_model()
+    if model is not None:
+        return model.encode(text).tolist()
+    # Lightweight deterministic hash fallback
+    import hashlib
+    h = hashlib.sha256(text.encode('utf-8')).digest()
+    return [(b / 255.0) for b in h[:384]] if len(h) >= 384 else [(b / 255.0) for b in (h * 12)[:384]]
 
 def embed_and_store(text: str, metadata: dict) -> str:
     index = init_pinecone()

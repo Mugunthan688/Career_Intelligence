@@ -38,50 +38,50 @@ export default function JDScraper({ onExtracted }) {
   }
 
   return (
-    <div className="glass-panel" style={{ padding: 24, borderColor: 'var(--border-mid)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
+    <div className="glass-panel" style={{ padding: 20 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div
             style={{
               width: 32,
               height: 32,
-              borderRadius: 10,
-              background: 'rgba(6, 182, 212, 0.15)',
-              border: '1px solid rgba(6, 182, 212, 0.3)',
-              color: 'var(--cyan)',
+              borderRadius: 9,
+              background: 'rgba(45,212,191,0.12)',
+              border: '1px solid rgba(45,212,191,0.25)',
+              color: 'var(--aurora-teal)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: 16,
+              fontSize: 15,
             }}
           >
             ⚡
           </div>
           <div>
-            <h4 style={{ fontSize: 16, fontWeight: 800, color: '#FFF' }} className="font-display">
-              Job Description Auto-Scraper
+            <h4 style={{ fontSize: 15, fontWeight: 700, color: '#F8FAFC' }} className="font-display">
+              Job Description Auto-Extractor
             </h4>
-            <div style={{ fontSize: 11, color: 'var(--txt-secondary)' }}>
+            <div style={{ fontSize: 11, color: 'var(--txt-muted)' }}>
               Auto-extract role, company & skills from link or text
             </div>
           </div>
         </div>
 
         {/* Tab Switcher */}
-        <div style={{ display: 'flex', gap: 4, background: 'rgba(6, 8, 16, 0.6)', padding: 3, borderRadius: 10, border: '1px solid var(--border-subtle)' }}>
+        <div style={{ display: 'flex', gap: 4, background: 'rgba(8,9,14,0.6)', padding: 3, borderRadius: 8, border: '1px solid rgba(255,255,255,0.05)' }}>
           <button
             type="button"
             onClick={() => setActiveTab('url')}
             style={{
-              padding: '6px 14px',
-              borderRadius: 8,
-              fontSize: 12,
+              padding: '5px 12px',
+              borderRadius: 6,
+              fontSize: 11,
               fontWeight: 600,
               border: 'none',
               cursor: 'pointer',
-              background: activeTab === 'url' ? 'var(--violet)' : 'transparent',
+              background: activeTab === 'url' ? 'var(--aurora-violet)' : 'transparent',
               color: activeTab === 'url' ? '#FFF' : 'var(--txt-muted)',
-              transition: 'all 0.2s ease',
+              transition: 'all 0.18s ease',
             }}
           >
             Paste URL
@@ -90,15 +90,15 @@ export default function JDScraper({ onExtracted }) {
             type="button"
             onClick={() => setActiveTab('text')}
             style={{
-              padding: '6px 14px',
-              borderRadius: 8,
-              fontSize: 12,
+              padding: '5px 12px',
+              borderRadius: 6,
+              fontSize: 11,
               fontWeight: 600,
               border: 'none',
               cursor: 'pointer',
-              background: activeTab === 'text' ? 'var(--violet)' : 'transparent',
+              background: activeTab === 'text' ? 'var(--aurora-violet)' : 'transparent',
               color: activeTab === 'text' ? '#FFF' : 'var(--txt-muted)',
-              transition: 'all 0.2s ease',
+              transition: 'all 0.18s ease',
             }}
           >
             Paste Raw Text
@@ -106,7 +106,7 @@ export default function JDScraper({ onExtracted }) {
         </div>
       </div>
 
-      <form onSubmit={handleExtract} style={{ display: 'flex', gap: 12 }}>
+      <form onSubmit={handleExtract} style={{ display: 'flex', gap: 10 }}>
         {activeTab === 'url' ? (
           <input
             type="url"
@@ -119,55 +119,55 @@ export default function JDScraper({ onExtracted }) {
         ) : (
           <textarea
             className="glass-input"
-            style={{ flex: 1, height: 75, resize: 'vertical' }}
+            style={{ flex: 1, height: 72, resize: 'vertical' }}
             placeholder="Paste complete job description text here..."
             value={rawText}
             onChange={(e) => setRawText(e.target.value)}
           />
         )}
 
-        <button type="submit" className="btn-primary" disabled={loading} style={{ height: activeTab === 'url' ? 'auto' : 75, minWidth: 140 }}>
-          {loading ? 'Extracting...' : '⚡ Auto-Scrape'}
+        <button type="submit" className="btn-primary" disabled={loading} style={{ height: activeTab === 'url' ? 'auto' : 72, minWidth: 130, padding: '0 16px', fontSize: 13 }}>
+          {loading ? 'Extracting...' : '⚡ Extract'}
         </button>
       </form>
 
       {/* Extracted Details Box */}
       {extracted && (
         <motion.div
-          initial={{ opacity: 0, y: 8 }}
+          initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           style={{
-            marginTop: 16,
-            padding: 16,
-            background: 'rgba(16, 185, 129, 0.08)',
-            border: '1px solid rgba(16, 185, 129, 0.3)',
-            borderRadius: 12,
+            marginTop: 14,
+            padding: 14,
+            background: 'rgba(52,211,153,0.06)',
+            border: '1px solid rgba(52,211,153,0.2)',
+            borderRadius: 10,
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-            <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--green)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--aurora-emerald)', textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: '"JetBrains Mono", monospace' }}>
               ✓ Extracted Successfully
             </span>
-            <span style={{ fontSize: 11, color: 'var(--txt-muted)' }}>Auto-filled below</span>
+            <span style={{ fontSize: 10, color: 'var(--txt-muted)' }}>Auto-filled below</span>
           </div>
 
-          <div style={{ display: 'flex', gap: 20, fontSize: 13, color: '#FFF', fontWeight: 600 }}>
+          <div style={{ display: 'flex', gap: 18, fontSize: 12, color: '#F8FAFC', fontWeight: 600 }}>
             <div>
-              <span style={{ color: 'var(--txt-muted)', fontWeight: 500 }}>Role: </span>
+              <span style={{ color: 'var(--txt-muted)', fontWeight: 400 }}>Role: </span>
               {extracted.job_role || 'N/A'}
             </div>
             {extracted.company && (
               <div>
-                <span style={{ color: 'var(--txt-muted)', fontWeight: 500 }}>Company: </span>
+                <span style={{ color: 'var(--txt-muted)', fontWeight: 400 }}>Company: </span>
                 {extracted.company}
               </div>
             )}
           </div>
 
           {extracted.required_skills?.length > 0 && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 8 }}>
               {extracted.required_skills.slice(0, 8).map((sk) => (
-                <span key={sk} style={{ padding: '3px 8px', background: 'rgba(255, 255, 255, 0.08)', borderRadius: 6, fontSize: 11, color: 'var(--cyan)' }}>
+                <span key={sk} className="pill-teal" style={{ padding: '2px 7px', borderRadius: 6, fontSize: 10 }}>
                   {sk}
                 </span>
               ))}
