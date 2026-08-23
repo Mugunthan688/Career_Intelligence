@@ -13,7 +13,7 @@ except Exception:
 
 from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException
 from fastapi.responses import Response
-from backend.auth.models import UserRegister, UserLogin, TokenResponse, ForgotPasswordRequest, ResetPasswordRequest
+from backend.auth.models import UserRegister, UserLogin, TokenResponse, ForgotPasswordRequest, ResetPasswordRequest, CoachEvaluateRequest, JDExtractRequest
 from backend.auth.jwt_handler import create_access_token
 from backend.auth.rbac import get_current_user, require_job_seeker
 from backend.utils.pdf_parser import parse_resume
@@ -242,15 +242,15 @@ async def analyze_resume(
 
 @router.post("/coach/evaluate")
 async def evaluate_answer(
-    question: str  = Form(...),
-    answer:   str  = Form(...),
-    job_role: str  = Form(...),
-    user:     dict = Depends(require_job_seeker),
+    req: CoachEvaluateRequest,
+    user: dict = Depends(require_job_seeker),
 ):
+    ans = req.user_answer or req.answer or ""
+    role = req.job_role or "General"
     from backend.agents.coach_agent import CoachAgent
-    coach  = CoachAgent()
-    result = coach.evaluate_answer(question, answer, job_role)
-    return {"status": "success", "result": result}
+    coach = CoachAgent()
+    result = coach.evaluate_answer(req.question, ans, role)
+    return {"status": "success", "result": result, **result}
 
 
 # ════════════════════════════════════════════════
@@ -421,6 +421,28 @@ async def delete_interview_session(
 # ════════════════════════════════════════════════
 # FEATURE 4 — JD SCRAPER
 # ════════════════════════════════════════════════
+
+@router.post("/jd/extract")
+async def extract_jd(
+    req: JDExtractRequest,
+    user: dict = Depends(require_job_seeker),
+):
+    """Extract structured job description from URL or raw text."""
+    from backend.agents.jd_extractor_agent import JDExtractorAgent
+    agent = JDExtractorAgent()
+
+    if req.url and req.url.startswith("http"):
+        from backend.utils.jd_scraper import scrape_jd_from_url
+        scraped = scrape_jd_from_url(req.url)
+        raw_text = scraped.get("raw_text", "")
+        extracted = agent.run(raw_text, url=req.url)
+        merged = {**scraped, **extracted}
+        return merged
+    elif req.text and len(req.text.strip()) > 10:
+        extracted = agent.run(req.text.strip())
+        return extracted
+    else:
+        raise HTTPException(status_code=400, detail="Please provide a valid job URL or job description text")
 
 @router.post("/jd/scrape")
 async def scrape_job_description(

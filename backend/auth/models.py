@@ -37,3 +37,13 @@ class ResetPasswordRequest(BaseModel):
     email: EmailStr
     otp: str
     new_password: str
+
+class CoachEvaluateRequest(BaseModel):
+    question: str
+    user_answer: Optional[str] = None
+    answer: Optional[str] = None
+    job_role: Optional[str] = "General"
+
+class JDExtractRequest(BaseModel):
+    url: Optional[str] = None
+    text: Optional[str] = None
