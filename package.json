@@ -1,8 +1,11 @@
 {
-  "name": "career-intelligence-os",
+  "name": "career-intelligence-monorepo",
   "private": true,
   "version": "1.0.0",
+  "workspaces": [
+    "frontend"
+  ],
   "scripts": {
-    "build": "cd frontend && npm install && npm run build && node -e \"const fs=require('fs'); fs.cpSync('dist', '../dist', {recursive: true});\""
+    "build": "npm run build --workspace=frontend"
   }
 }
