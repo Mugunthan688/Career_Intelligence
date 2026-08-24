@@ -26,46 +26,79 @@ export default function Login() {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault()
-    if (!email || !password) { toast.error('Please enter email and password'); return }
+    const cleanEmail = email.trim().toLowerCase()
+    const cleanPass = password.trim()
+    if (!cleanEmail || !cleanPass) { toast.error('Please enter email and password'); return }
     setLoading(true)
     try {
-      const res = await api.post('/auth/login', { email, password })
+      const res = await api.post('/auth/login', { email: cleanEmail, password: cleanPass })
       saveToken(res.data.access_token, res.data.role || 'job_seeker', res.data.name || 'User')
       toast.success(`Welcome back, ${res.data.name || 'User'}!`)
       navigate('/dashboard')
     } catch (err) {
-      toast.error(err.response?.data?.detail || 'Invalid email or password')
+      const rawDetail = err.response?.data?.detail
+      let msg = 'Invalid email or password'
+      if (typeof rawDetail === 'string') {
+        msg = rawDetail
+      } else if (Array.isArray(rawDetail)) {
+        msg = rawDetail.map((d) => d.msg || JSON.stringify(d)).join(', ')
+      } else if (err.message) {
+        msg = err.message
+      }
+      toast.error(msg)
     } finally { setLoading(false) }
   }
 
   const handleSendOtp = async (e) => {
     e.preventDefault()
-    if (!resetEmail.trim()) { toast.error('Please enter your registered email'); return }
+    const cleanEmail = resetEmail.trim().toLowerCase()
+    if (!cleanEmail) { toast.error('Please enter your registered email'); return }
     setLoading(true)
     try {
-      const res = await api.post('/auth/forgot-password', { email: resetEmail.trim() })
+      const res = await api.post('/auth/forgot-password', { email: cleanEmail })
       const otp = res.data.otp_code
       setSentOtpBanner(otp)
-      toast.info(`📩 OTP sent to ${resetEmail}! (Code: ${otp})`, { autoClose: 10000 })
+      toast.info(`📩 OTP sent to ${cleanEmail}! (Code: ${otp})`, { autoClose: 10000 })
       setForgotStep(2)
     } catch (err) {
-      toast.error(err.response?.data?.detail || 'Failed to send OTP')
+      const rawDetail = err.response?.data?.detail
+      let msg = 'Failed to send OTP'
+      if (typeof rawDetail === 'string') {
+        msg = rawDetail
+      } else if (Array.isArray(rawDetail)) {
+        msg = rawDetail.map((d) => d.msg || JSON.stringify(d)).join(', ')
+      } else if (err.message) {
+        msg = err.message
+      }
+      toast.error(msg)
     } finally { setLoading(false) }
   }
 
   const handleResetPassword = async (e) => {
     e.preventDefault()
-    if (!otpCode.trim() || !newPassword.trim()) { toast.error('Enter OTP and new password'); return }
+    const cleanEmail = resetEmail.trim().toLowerCase()
+    const cleanOtp = otpCode.trim()
+    const cleanPass = newPassword.trim()
+    if (!cleanOtp || !cleanPass) { toast.error('Enter OTP and new password'); return }
     setLoading(true)
     try {
       const res = await api.post('/auth/reset-password', {
-        email: resetEmail.trim(), otp: otpCode.trim(), new_password: newPassword.trim(),
+        email: cleanEmail, otp: cleanOtp, new_password: cleanPass,
       })
       toast.success(res.data.message || 'Password reset successfully!')
-      setEmail(resetEmail.trim()); setPassword(newPassword.trim())
+      setEmail(cleanEmail); setPassword(cleanPass)
       setMode('login'); setForgotStep(1); setSentOtpBanner('')
     } catch (err) {
-      toast.error(err.response?.data?.detail || 'Invalid OTP')
+      const rawDetail = err.response?.data?.detail
+      let msg = 'Invalid OTP'
+      if (typeof rawDetail === 'string') {
+        msg = rawDetail
+      } else if (Array.isArray(rawDetail)) {
+        msg = rawDetail.map((d) => d.msg || JSON.stringify(d)).join(', ')
+      } else if (err.message) {
+        msg = err.message
+      }
+      toast.error(msg)
     } finally { setLoading(false) }
   }
 

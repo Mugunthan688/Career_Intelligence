@@ -11,17 +11,17 @@ class UserRole(str, Enum):
 # ── User Schemas ────────────────────────────────
 class UserRegister(BaseModel):
     name: str
-    email: EmailStr
+    email: str
     password: str
     role: UserRole = UserRole.JOB_SEEKER
 
 class UserLogin(BaseModel):
-    email: EmailStr
+    email: str
     password: str
 
 class UserOut(BaseModel):
     name: str
-    email: EmailStr
+    email: str
     role: UserRole
 
 class TokenResponse(BaseModel):
@@ -31,10 +31,10 @@ class TokenResponse(BaseModel):
     name: str
 
 class ForgotPasswordRequest(BaseModel):
-    email: EmailStr
+    email: str
 
 class ResetPasswordRequest(BaseModel):
-    email: EmailStr
+    email: str
     otp: str
     new_password: str
 

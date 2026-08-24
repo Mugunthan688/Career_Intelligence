@@ -14,18 +14,31 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!name || !email || !password) {
+    const cleanName = name.trim()
+    const cleanEmail = email.trim().toLowerCase()
+    const cleanPass = password.trim()
+
+    if (!cleanName || !cleanEmail || !cleanPass) {
       toast.error('Please fill in all fields')
       return
     }
 
     setLoading(true)
     try {
-      await api.post('/auth/register', { name, email, password, role })
+      await api.post('/auth/register', { name: cleanName, email: cleanEmail, password: cleanPass, role })
       toast.success('Registration successful! Please sign in.')
       navigate('/login')
     } catch (err) {
-      toast.error(err.response?.data?.detail || 'Registration failed')
+      const rawDetail = err.response?.data?.detail
+      let msg = 'Registration failed'
+      if (typeof rawDetail === 'string') {
+        msg = rawDetail
+      } else if (Array.isArray(rawDetail)) {
+        msg = rawDetail.map((d) => d.msg || JSON.stringify(d)).join(', ')
+      } else if (err.message) {
+        msg = err.message
+      }
+      toast.error(msg)
     } finally {
       setLoading(false)
     }
