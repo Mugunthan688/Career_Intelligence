@@ -5,8 +5,11 @@
 import axios from 'axios'
 import { getToken, clearToken } from './auth'
 
+const rawBaseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+const cleanBaseURL = rawBaseURL.trim().replace(/\/+$/, '')
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000',
+  baseURL: cleanBaseURL,
   timeout: 60000,                              // 60s timeout for heavy agent calls
   headers: { 'Content-Type': 'application/json' },
 })
@@ -27,8 +30,11 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Token expired or invalid — clear and redirect
+    const isAuthRoute = error.config?.url?.includes('/auth/')
+    const isLoginPage = window.location.pathname === '/login' || window.location.pathname === '/register'
+
+    if (error.response?.status === 401 && !isAuthRoute && !isLoginPage) {
+      // Token expired or invalid on a protected page — clear and redirect
       clearToken()
       window.location.href = '/login'
     }

@@ -1,22 +1,4 @@
 {
-  "mmugunthan688@gmail.com": {
-    "name": "Mugunthan ",
-    "email": "mmugunthan688@gmail.com",
-    "password": "$2b$12$lS1OujXKIhkZbAg6SDAuN.jhIFn8yseXwD1vhKFaBfFrx7a1.Jsv2",
-    "role": "job_seeker"
-  },
-  "mmugunthan7777@gmail.com": {
-    "name": "Mugunthan M",
-    "email": "mmugunthan7777@gmail.com",
-    "password": "$2b$12$JiQRuXVNptaB7yaY1jg/3uWESVOY3dRQKn0pfGoFObOY7O3mgfQui",
-    "role": "job_seeker"
-  },
-  "mugunthan_ats_test@gmail.com": {
-    "name": "Mugunthan M",
-    "email": "mugunthan_ats_test@gmail.com",
-    "password": "$2b$12$Tx37uqUkdLJWHbivPNKvr.F88TGlJRxizohG/K92xBqhBDJ8eL9sS",
-    "role": "job_seeker"
-  },
   "user@example.com": {
     "name": "Demo Job Seeker",
     "email": "user@example.com",
@@ -34,11 +16,5 @@
     "email": "recruiter@example.com",
     "password": "pbkdf2:sha256:9001b5a9682230f29316e0d3cbb39bde:1c273342126f23179397e239a591c0964b4343b0b7a8e8a8167865a0ffd91a88",
     "role": "recruiter"
-  },
-  "test_1787467376@example.com": {
-    "name": "Test Candidate",
-    "email": "test_1787467376@example.com",
-    "password": "pbkdf2:sha256:b21b3f266c8258e0c47e7eaf62a31e22:3b76c04be34af1d35bafeef55eceb285c9bc7836220795a2d80e5055ead0a0f0",
-    "role": "job_seeker"
   }
 }

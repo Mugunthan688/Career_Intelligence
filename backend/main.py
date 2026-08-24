@@ -1,4 +1,5 @@
 import sys
+import os
 
 if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
     try:
@@ -18,18 +19,15 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# ── CORS Middleware ──────────────────────────────
-import os
-
-allowed_origins_env = os.getenv("ALLOWED_ORIGINS", "*")
-allowed_origins = [origin.strip() for origin in allowed_origins_env.split(",")] if allowed_origins_env != "*" else ["*"]
-
+# ── CORS Middleware (Universal for Vercel, Render & Localhost) ────
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_origin_regex=r"https?://.*",
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 # ── Include Routes ───────────────────────────────
