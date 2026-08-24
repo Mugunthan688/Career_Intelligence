@@ -1,7 +1,6 @@
 {
-  "buildCommand": "cd frontend && npm install && npm run build && node -e \"const fs=require('fs'); fs.cpSync('dist', '../dist', {recursive: true});\"",
-  "outputDirectory": "dist",
   "framework": "vite",
+  "outputDirectory": "dist",
   "rewrites": [
     {
       "source": "/(.*)",
