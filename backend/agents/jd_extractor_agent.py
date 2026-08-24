@@ -28,6 +28,10 @@ class JDExtractorAgent:
             except Exception:
                 self.llm = None
 
+    def extract_from_text(self, jd_text: str) -> dict:
+        """Alias for run() to support direct text extraction."""
+        return self.run(raw_text=jd_text)
+
     def run(self, raw_text: str, url: str = "") -> dict:
         print("[JD Extractor Agent] Extracting structured data from JD text...")
 
